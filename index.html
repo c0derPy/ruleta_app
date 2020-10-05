@@ -50,6 +50,7 @@
 <script type="text/javascript">
 	
 	$(function(){
+		/* Inicia el sorteo de la RULETA */
 		$.getJSON("https://ruletaapi.herokuapp.com/api/ruleta",
 			function(data){
 				$.each(data, function(key, val){

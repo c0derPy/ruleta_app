@@ -115,6 +115,7 @@
 
 <script type="text/javascript">
 	$(function(){
+		/* Genera el listado de jugadores registrados */
 		$.getJSON("https://ruletaapi.herokuapp.com/api/jugadores",
 			function(data){
 				$.each(data, function(key, val){
@@ -126,7 +127,7 @@
 	});
 
 	$("#submit").click(function(){
-		
+		/* Envia informacion del nuevo jugador a registrar */
 		var jugador = {
 				nombre: $("#nombre").val(),
 				apellido: $("#apellido").val()
@@ -154,6 +155,7 @@
 	});
 
 	function editarJugador(id){
+		/* Muestra informacion del jugador a editar*/
 		$.getJSON("https://ruletaapi.herokuapp.com/api/jugador/"+id,
 			function(data){
 				$('#id-editar').val(id);
@@ -167,6 +169,7 @@
 	}
 
 	$("#submitEditar").click(function(){
+		/* Envia informacion del jugador a modificar */
 		var id = $('#id-editar').val()
 		var jugador = {
 				nombre: $("#nombre-editar").val(),
