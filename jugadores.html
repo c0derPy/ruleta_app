@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Jugadores</title>
+	<!-- CSS only -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		   <a class="navbar-brand" href="index.html">Ruleta</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+		  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+		    <div class="navbar-nav">
+		      <a class="nav-link active" href="jugadores.html">Jugadores <span class="sr-only">(current)</span></a>
+		      <a class="nav-link" href="#">Reportes</a>
+		    </div>
+		  </div>
+	</nav>
+	<div class="container">
+		<br>
+		<h1>Jugadores de Ruleta</h1>
+		<hr>
+		<!-- Button trigger modal -->
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevoJugador">
+		  	Registrar jugador
+		</button>
+		<br><br>
+		<div id="mensaje">
+			
+		</div>
+		<table id="jugadoresTabla" class="table">
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Apellido</th>
+					<th>Dinero</th>
+					<th>Estado</th>
+					<th>Fecha Creacion</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Modal Registrar Jugador -->
+	<div class="modal fade" id="nuevoJugador" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">Nuevo Jugador</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+		    <label>Nombre:</label><br>
+			<input type="text" name="nombre" id="nombre" class="form-control" required><br>
+			<label>Apellido:</label><br>
+			<input type="text" name="apellido" id="apellido" class="form-control" required><br><br>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+	        <button type="button" class="btn btn-primary" id="submit">Registrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- final modal -->
+
+	<!-- Modal Editar Jugador -->
+	<div class="modal fade" id="editarJugador" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">Modificar Jugador</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<input type="hidden" name="id" id="id-editar">
+		    <label>Nombre:</label><br>
+			<input type="text" name="nombre" id="nombre-editar" class="form-control" required><br>
+			<label>Apellido:</label><br>
+			<input type="text" name="apellido" id="apellido-editar" class="form-control" required><br>
+			<label>Dinero:</label><br>
+			<input type="number" name="dinero" id="dinero-editar" class="form-control" required><br>
+			<label>Estado:</label><br>
+			<select name="estado" id="estado-editar" class="form-control">
+				<option value="1">Activar</option>
+				<option value="0">Inactivar</option>
+			</select>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+	        <button type="button" class="btn btn-primary" id="submitEditar">Registrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- final modal -->
+	
+</body>
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+	$(function(){
+		$.getJSON("https://ruletaapi.herokuapp.com/api/jugadores",
+			function(data){
+				$.each(data, function(key, val){
+					var fila = "<tr><td>"+val.nombre+"</td><td>"+val.apellido+"</td><td>"+val.dinero+"</td><td>"+val.activo+"</td><td>"+val.fecha_creacion+"</td><td><a class='editar-modal' data-toggle='modal' href='#' onClick='editarJugador(\""+val.id+"\");'>Editar</a></td></td></tr>";
+					$(fila).appendTo("#jugadoresTabla");
+				});
+			}
+		);
+	});
+
+	$("#submit").click(function(){
+		
+		var jugador = {
+				nombre: $("#nombre").val(),
+				apellido: $("#apellido").val()
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "https://ruletaapi.herokuapp.com/api/jugador/registro",
+			dataType: "json",
+			data: JSON.stringify(jugador),
+			success: function(respuesta, status){
+				if(status == 'success'){
+					alert('Jugador registrado correctamente!')
+					location.reload()
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				if(textStatus == 'error'){
+					alert('Ingrese nombre y apellido validos!')
+					location.reload()
+				}
+			}
+		});    
+			
+	});
+
+	function editarJugador(id){
+		$.getJSON("https://ruletaapi.herokuapp.com/api/jugador/"+id,
+			function(data){
+				$('#id-editar').val(id);
+				$('#nombre-editar').val(data.nombre);
+				$('#apellido-editar').val(data.apellido);
+				$('#dinero-editar').val(data.dinero);
+				//$('#estado-editar input').val(data.nombre);
+				$('#editarJugador').modal('toggle');
+				$('#editarJugador').modal('show');
+		});
+	}
+
+	$("#submitEditar").click(function(){
+		var id = $('#id-editar').val()
+		var jugador = {
+				nombre: $("#nombre-editar").val(),
+				apellido: $("#apellido-editar").val(),
+				dinero: $('#dinero-editar').val(),
+				activo: $('#estado-editar').val()
+		};
+		
+		$.ajax({
+			type: "PUT",
+			url: "https://ruletaapi.herokuapp.com/api/jugador/editar/"+id,
+			dataType: "json",
+			data: JSON.stringify(jugador),
+			success: function(respuesta, status){
+				if(status == 'success'){
+					alert('Jugador registrado correctamente!')
+					location.reload()
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				if(textStatus == 'error'){
+					location.reload();
+					alert('Ingrese nombre y apellido validos!')
+					location.reload()
+				}
+			}
+		});	    
+
+	});
+
+</script>
+</html>
